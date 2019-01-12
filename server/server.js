@@ -70,7 +70,7 @@ app.post('/login', async (req, res, next) => {
 app.use( async (req, res, next) => {
     const userToken = req.headers['x-access-token'];
     const apiKey = req.headers['x-api-key'];
-    let user;
+    let userList;
 
     if (userToken) {
         const validationResponse = await auth.validateToken(userToken);
@@ -78,21 +78,20 @@ app.use( async (req, res, next) => {
             return next(boom.unauthorized());
         }
 
-        user = await userModel.find({_id: validationResponse.validation.id});
+        userList = await userModel.find({_id: validationResponse.validation.id});
     } else if (apiKey) {
-        user = await userModel.find({api_key: apiKey});
+        userList = await userModel.find({api_key: apiKey});
     } else {
         return next(boom.unauthorized());
     }
 
-    req.user = user;
+    req.user = userList[0];
     return next();
 
 });
 
 app.post('/projects', async (req, res, next) => {
     const userId = req.user._id;
-    console.log(validationResponse);
     const newProject = projectModel({
         user_id: userId,
         name: req.body.name,
@@ -158,5 +157,5 @@ app.put('/projects/:projectId/forwards/:forwardId', async (req, res, next) => {
     }
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => console.log(`LSTM VISUALIZER listening on port ${port}!`));
 
