@@ -6,6 +6,7 @@ const forwardSchema = new Schema({
     user_id: { type: String, required: true},
     tag: { type: String, required: false },
     data: {type: Object},
+    pytorch_forward_creation_time:  {type: String, required: false},
     created_at: Date
 });
 

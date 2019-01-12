@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const boom = require('boom');
 const _ = require('lodash');
+const uuid = require('uuid');
 
 const mongo = require('./lib/mongo');
 const userModel = require('./models/user');
@@ -34,13 +35,14 @@ app.post('/signup', async (req, res, next) => {
     const newUser = userModel({
         email: req.body.email,
         password: req.body.password,
+        api_key: uuid.v1(),
         created_at: new Date()
     });
 
     try {
         const createdUser = await newUser.save();
         const userToken = auth.createToken(createdUser._id);
-        res.send({user_token: userToken});
+        res.send({user_token: userToken, api_key: createdUser.api_key});
     }
     catch(e) {
         return next(boom.internal(e));
@@ -62,17 +64,34 @@ app.post('/login', async (req, res, next) => {
     const user = dbUser[0];
     const userToken = auth.createToken(user._id);
 
-    res.send({user_token: userToken});
+    res.send({user_token: userToken, api_key: user.api_key});
 });
 
-app.post('/projects', async (req, res, next) => {
-    const token = req.headers['x-access-token'];
-    const validationResponse = await auth.validateToken(token);
-    if (!token || validationResponse.validated === false) {
+app.use( async (req, res, next) => {
+    const userToken = req.headers['x-access-token'];
+    const apiKey = req.headers['x-api-key'];
+    let user;
+
+    if (userToken) {
+        const validationResponse = await auth.validateToken(userToken);
+        if (validationResponse.validated === false) {
+            return next(boom.unauthorized());
+        }
+
+        user = await userModel.find({_id: validationResponse.validation.id});
+    } else if (apiKey) {
+        user = await userModel.find({api_key: apiKey});
+    } else {
         return next(boom.unauthorized());
     }
 
-    const userId = validationResponse.validation.id;
+    req.user = user;
+    return next();
+
+});
+
+app.post('/projects', async (req, res, next) => {
+    const userId = req.user._id;
     console.log(validationResponse);
     const newProject = projectModel({
         user_id: userId,
@@ -91,31 +110,20 @@ app.post('/projects', async (req, res, next) => {
 });
 
 app.get('/projects', async (req, res, next) => {
-    const token = req.headers['x-access-token'];
-    const validationResponse = await auth.validateToken(token);
-    if (!token || validationResponse.validated === false) {
-        return next(boom.unauthorized());
-    }
-
-    const userId = validationResponse.validation.id;
+    const userId = req.user._id;
 
     return res.send(await projectModel.find({user_id: userId}));
 });
 
 app.post('/projects/:projectId/forwards', async (req, res, next) => {
-    const token = req.headers['x-access-token'];
-    const validationResponse = await auth.validateToken(token);
-    if (!token || validationResponse.validated === false) {
-        return next(boom.unauthorized());
-    }
-
-    const userId = validationResponse.validation.id;
+    const userId = req.user._id;
 
     const newForward = forwardModel({
         user_id: userId,
         project_id: req.params.projectId,
         tag: req.body.tag,
         data: req.body.data,
+        pytorch_forward_creation_time: req.body.pytorch_forward_creation_time,
         created_at: new Date()
     });
 
@@ -129,25 +137,13 @@ app.post('/projects/:projectId/forwards', async (req, res, next) => {
 });
 
 app.get('/projects/:projectId/forwards', async (req, res, next) => {
-    const token = req.headers['x-access-token'];
-    const validationResponse = await auth.validateToken(token);
-    if (!token || validationResponse.validated === false) {
-        return next(boom.unauthorized());
-    }
-
-    const userId = validationResponse.validation.id;
+    const userId = req.user._id;
 
     return res.send(await forwardModel.find({user_id: userId, project_id: req.params.projectId}));
 });
 
 app.put('/projects/:projectId/forwards/:forwardId', async (req, res, next) => {
-    const token = req.headers['x-access-token'];
-    const validationResponse = await auth.validateToken(token);
-    if (!token || validationResponse.validated === false) {
-        return next(boom.unauthorized());
-    }
-
-    const userId = validationResponse.validation.id;
+    const userId = req.user._id;
     const query = {user_id: userId, project_id: req.params.projectId, _id: req.params.forwardId};
 
     let relevantForward =  await forwardModel.find(query)[0];
