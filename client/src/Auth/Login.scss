@@ -1,0 +1,36 @@
+#root {
+  height: 100%;
+}
+
+.login-screen {
+  height: 100%;
+
+  .login-row {
+    background-color: #eee;
+    height: 100%;
+  }
+
+  .login-form {
+    padding: 60px;
+    background: #fff;
+    border-radius: 6px;
+    text-align: center;
+
+    .ant-input-affix-wrapper {
+      margin-bottom: 30px;
+    }
+
+    .icon {
+      color: rgba(0, 0, 0, .25);
+    }
+
+    .logo {
+      max-height: 200px;
+      margin-bottom: 50px;
+    }
+
+    .login-button {
+      width: 100%;
+    }
+  }
+}
