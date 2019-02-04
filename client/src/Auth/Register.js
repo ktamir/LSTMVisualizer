@@ -11,10 +11,10 @@ class Login extends Component {
                     <Col key=".0" span="8">
                         <Form className="login-form">
                             {/*<img className="logo" src="/img/logos/logo.png"/>*/}
-                            <div className="logo">Login</div>
-                            <Input placeholder="Username" prefix={<Icon type="user" className="icon"/>}/>
+                            <div className="logo">Register</div>
+                            <Input placeholder="Email" prefix={<Icon type="user" className="icon"/>}/>
                             <Input placeholder="Password" prefix={<Icon type="lock" className="icon"/>}/>
-                            <Button className="login-button" type="primary" size="large" onClick={() => this.props.authStore.login()}>Log In</Button>
+                            <Button className="login-button" type="primary" size="large" onClick={() => this.props.authStore.register()}>Log In</Button>
                         </Form>
                     </Col>
                 </Row>

@@ -9,10 +9,33 @@ const userModel = require('./models/user');
 const projectModel = require('./models/project');
 const forwardModel = require('./models/forward');
 const auth = require('./lib/auth');
+const cors = require('cors');
 
 const app = express();
 const port = 3000;
 
+const checkUser = async (req, res, next) => {
+    const userToken = req.headers['x-access-token'];
+    const apiKey = req.headers['x-api-key'];
+    let userList;
+
+    if (userToken) {
+        const validationResponse = await auth.validateToken(userToken);
+        if (validationResponse.validated === false) {
+            return next(boom.unauthorized());
+        }
+
+        userList = await userModel.find({_id: validationResponse.validation.id});
+    } else if (apiKey) {
+        userList = await userModel.find({api_key: apiKey});
+    } else {
+        return next(boom.unauthorized());
+    }
+
+    req.user = userList[0];
+    return next();
+
+};
 
 
 mongo.init();
@@ -20,6 +43,8 @@ mongo.init();
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
+
+app.use(cors())
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
@@ -67,30 +92,7 @@ app.post('/login', async (req, res, next) => {
     res.send({user_token: userToken, api_key: user.api_key});
 });
 
-app.use( async (req, res, next) => {
-    const userToken = req.headers['x-access-token'];
-    const apiKey = req.headers['x-api-key'];
-    let userList;
-
-    if (userToken) {
-        const validationResponse = await auth.validateToken(userToken);
-        if (validationResponse.validated === false) {
-            return next(boom.unauthorized());
-        }
-
-        userList = await userModel.find({_id: validationResponse.validation.id});
-    } else if (apiKey) {
-        userList = await userModel.find({api_key: apiKey});
-    } else {
-        return next(boom.unauthorized());
-    }
-
-    req.user = userList[0];
-    return next();
-
-});
-
-app.post('/projects', async (req, res, next) => {
+app.post('/projects', checkUser, async (req, res, next) => {
     const userId = req.user._id;
     const newProject = projectModel({
         user_id: userId,
@@ -108,13 +110,13 @@ app.post('/projects', async (req, res, next) => {
 
 });
 
-app.get('/projects', async (req, res, next) => {
+app.get('/projects', checkUser, async (req, res, next) => {
     const userId = req.user._id;
 
     return res.send(await projectModel.find({user_id: userId}));
 });
 
-app.post('/projects/:projectId/forwards', async (req, res, next) => {
+app.post('/projects/:projectId/forwards', checkUser, async (req, res, next) => {
     const userId = req.user._id;
 
     const newForward = forwardModel({
@@ -135,13 +137,13 @@ app.post('/projects/:projectId/forwards', async (req, res, next) => {
     }
 });
 
-app.get('/projects/:projectId/forwards', async (req, res, next) => {
+app.get('/projects/:projectId/forwards', checkUser, async (req, res, next) => {
     const userId = req.user._id;
 
     return res.send(await forwardModel.find({user_id: userId, project_id: req.params.projectId}));
 });
 
-app.put('/projects/:projectId/forwards/:forwardId', async (req, res, next) => {
+app.put('/projects/:projectId/forwards/:forwardId', checkUser, async (req, res, next) => {
     const userId = req.user._id;
     const query = {user_id: userId, project_id: req.params.projectId, _id: req.params.forwardId};
 
