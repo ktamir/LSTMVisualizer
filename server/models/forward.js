@@ -7,7 +7,9 @@ const forwardSchema = new Schema({
     tag: { type: String, required: false },
     data: {type: Object},
     pytorch_forward_creation_time:  {type: String, required: false},
-    created_at: Date
+    created_at: Date,
+    general: { type: Object },
+    data_by_iteration: { type: Object }
 });
 
 const Forward = mongoose.model('Forward', forwardSchema);

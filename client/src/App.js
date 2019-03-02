@@ -9,6 +9,7 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {Dashboard} from "./Dashboard/Dashboard";
 import {inject, observer} from "mobx-react";
 import Project from "./Project/Project";
+import AppMenu from "./AppMenu/AppMenu";
 
 const {Content, Sider, Header, Footer} = Layout;
 
@@ -20,37 +21,7 @@ const App = () => (
 
             <Layout style={{minHeight: '100vh'}}>
 
-                <Sider
-                    trigger={null}
-                    className="menu"
-                >
-                    <div className="menu-header" style={{color: 'white', textAlign: 'center', marginTop: 25}}>
-                        LSTM Visualizer
-                    </div>
-                    <Menu
-                        key="Menu"
-                        mode="inline"
-                        theme="dark"
-                        style={{padding: "16px 0", width: "100%"}}
-                    >
-                        <Menu.Item key="1">
-                            <Icon type="dashboard"/>
-                            <span>Dashboard</span>
-                        </Menu.Item>
-                        <Menu.Item key="2">
-                            <Icon type="project"/>
-                            <span>Projects</span>
-                        </Menu.Item>
-                        <Menu.Item key="3">
-                            <Icon type="pie-chart"/>
-                            <span>About</span>
-                        </Menu.Item>
-                        <Menu.Item key="4">
-                            <Icon type="question-circle"/>
-                            <span>Help</span>
-                        </Menu.Item>
-                    </Menu>
-                </Sider>
+                <AppMenu/>
 
                 <Layout>
                     <Header style={{background: '#fff', padding: 0}}>

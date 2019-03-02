@@ -123,7 +123,8 @@ app.post('/projects/:projectId/forwards', checkUser, async (req, res, next) => {
         user_id: userId,
         project_id: req.params.projectId,
         tag: req.body.tag,
-        data: req.body.data,
+        data_by_iteration: req.body.data_by_iteration,
+        general: req.body.general,
         pytorch_forward_creation_time: req.body.pytorch_forward_creation_time,
         created_at: new Date()
     });

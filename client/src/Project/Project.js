@@ -2,12 +2,15 @@ import React, {Component} from "react";
 import {observer, inject} from "mobx-react";
 import axios from "axios";
 import {API_URL} from "../consts";
+import {Table, Divider} from "antd";
+import './Project.scss';
+import ForwardVisualizationModal from "./ForwardVisualization/ForwardVisualizationModal";
 
 class Project extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {showModal: false, modalData: null};
     }
 
     componentDidUpdate = async () => {
@@ -19,11 +22,38 @@ class Project extends Component {
         }
     };
 
-    render() {
-        console.log("token: " + this.props.authStore.userToken);
-        return <div>
-            <h3>Project ID {this.props.match.params.projectId}</h3>
+    showModal = (modalData) => this.setState({...this.state, showModal: true, modalData});
 
+    onCloseModal = () => this.setState({...this.state, showModal: false, modalData: null});
+
+    render() {
+        const columns = [{
+            title: 'Iteration',
+            dataIndex: 'data_by_iteration.iteration',
+            key: 'iteration',
+        }, {
+            title: 'Label',
+            key: 'label',
+            render: (text, record) => record.data_by_iteration.text.join(' ')
+        }, {
+            title: 'Actions',
+            key: 'show',
+            render: (text, record) => (
+                <span>
+                  <a onClick={() => this.showModal(record.data_by_iteration)}>Show Visualization</a>
+                </span>)
+        }];
+
+        console.log("token: " + this.props.authStore.userToken);
+        console.log(this.state.data);
+
+        return <div className="project">
+            <h2 className="title">Data for project ID {this.props.match.params.projectId}</h2>
+            <Table className="forwards-table" dataSource={this.state.data} columns={columns}/>
+            <ForwardVisualizationModal
+                visible={this.state.showModal}
+                onCloseModal={this.onCloseModal}
+                data={this.state.modalData}/>
         </div>
     }
 }
