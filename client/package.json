@@ -10,7 +10,9 @@
     "mobx-persist": "^0.4.1",
     "mobx-react": "^5.4.3",
     "node-sass": "^4.11.0",
+    "prop-types": "^15.7.2",
     "react": "^16.7.0",
+    "react-avatar": "^3.6.0",
     "react-dom": "^16.7.0",
     "react-router-dom": "^4.3.1"
   },

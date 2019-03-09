@@ -22,6 +22,7 @@ const checkUser = async (req, res, next) => {
     if (userToken) {
         const validationResponse = await auth.validateToken(userToken);
         if (validationResponse.validated === false) {
+            res.status(401);
             return next(boom.unauthorized());
         }
 
@@ -29,6 +30,7 @@ const checkUser = async (req, res, next) => {
     } else if (apiKey) {
         userList = await userModel.find({api_key: apiKey});
     } else {
+        res.status(401);
         return next(boom.unauthorized());
     }
 

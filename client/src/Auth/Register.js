@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Row, Col, Input, Button, Icon, Form} from 'antd';
 import './Login.scss';
 import {inject, observer} from "mobx-react";
+import {Redirect} from "react-router-dom";
 
 class Login extends Component {
 
@@ -24,6 +25,10 @@ class Login extends Component {
     };
 
     render() {
+        if (this.props.authStore.isAuthenticated === true) {
+            return <Redirect to="/dashboard" />;
+        }
+
         return (
             <div className="login-screen">
                 <Row type="flex" justify="space-around" className="login-row" align="middle">
