@@ -12,7 +12,7 @@ const auth = require('./lib/auth');
 const cors = require('cors');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const checkUser = async (req, res, next) => {
     const userToken = req.headers['x-access-token'];
