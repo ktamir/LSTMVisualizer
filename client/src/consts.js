@@ -1,1 +1,1 @@
-export const API_URL = "http://lstm-visualizer.herokuapp.com/"
+export const API_URL = "http://lstm-visualizer.herokuapp.com";
