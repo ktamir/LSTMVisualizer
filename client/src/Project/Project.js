@@ -57,7 +57,9 @@ class Project extends Component {
     renderProject = () => {
         if (this.state.data) {
             return this.state.data.length === 0 ?
-                <Card><p>Your project doesn't have any data :(</p></Card> :
+                <Card><p>Your project doesn't have any data :(</p>
+                <p>Use your api key {this.props.authStore.apiKey} to send data from your PyTorch project</p>
+                </Card> :
                 <Table className="forwards-table" dataSource={this.state.data} columns={columns}/>
         }
         return <Spin/>
