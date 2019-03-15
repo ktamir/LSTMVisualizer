@@ -6,30 +6,30 @@ import {Table, Divider, Card, Spin} from "antd";
 import './Project.scss';
 import ForwardVisualizationModal from "./ForwardVisualization/ForwardVisualizationModal";
 
-const columns = [{
-    title: 'Iteration',
-    dataIndex: 'data_by_iteration.iteration',
-    key: 'iteration',
-}, {
-    title: 'Label',
-    key: 'label',
-    render: (text, record) => record.data_by_iteration.text.join(' ')
-}, {
-    title: 'Actions',
-    key: 'show',
-    render: (text, record) => (
-        <span>
-          <a onClick={() => this.showModal(record.data_by_iteration)}>Show Visualization</a>
-        </span>
-    )
-}];
-
 class Project extends Component {
 
     constructor(props) {
         super(props);
         this.state = {showModal: false, modalData: null};
     }
+
+    columns = [{
+        title: 'Iteration',
+        dataIndex: 'data_by_iteration.iteration',
+        key: 'iteration',
+    }, {
+        title: 'Label',
+        key: 'label',
+        render: (text, record) => record.data_by_iteration.text.join(' ')
+    }, {
+        title: 'Actions',
+        key: 'show',
+        render: (text, record) => (
+            <span>
+          <a onClick={() => this.showModal(record.data_by_iteration)}>Show Visualization</a>
+        </span>
+        )
+    }];
 
     componentDidMount = async () => {
         await this.fetchForwards();
@@ -58,7 +58,7 @@ class Project extends Component {
         if (this.state.data) {
             return this.state.data.length === 0 ?
                 <Card><p>Your project doesn't have any data :(</p></Card> :
-                <Table className="forwards-table" dataSource={this.state.data} columns={columns}/>
+                <Table className="forwards-table" dataSource={this.state.data} columns={this.columns}/>
         }
         return <Spin/>
 
