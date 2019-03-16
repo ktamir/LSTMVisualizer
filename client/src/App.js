@@ -7,6 +7,7 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {inject, observer} from "mobx-react";
 import AppContainer from "./AppContainer/AppContainer";
 import Logout from "./Auth/Logout";
+import {Landing} from "./Landing/Landing";
 
 const App = () => (
     <Router>
@@ -14,6 +15,7 @@ const App = () => (
             <Route path="/login/" component={Login}/>
             <Route path="/register/" component={Register}/>
             <Route path="/logout" component={Logout}/>
+            <Route path="/" component={Landing} />
 
             <AppContainer />
         </Switch>

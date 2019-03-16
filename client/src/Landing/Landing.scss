@@ -1,0 +1,48 @@
+.landing {
+  height: 100%;
+  background:
+          /* top, transparent black, faked with gradient */
+          linear-gradient(
+                          rgba(0, 0, 0, 0.7),
+                          rgba(0, 0, 0, 0.7)
+          ),
+            /* bottom, image */
+          url('landing.jpg');
+
+  .landing-header {
+    h3 {
+      padding: 120px 0 80px 150px;
+      color: white;
+      font-size: 64px;
+    }
+  }
+
+  .landing-content {
+    color: white;
+    text-align: center;
+    padding-top: 80px;
+
+    .landing-col {
+      padding: 0 80px 0 80px;
+
+      i {
+        font-size: 24px;
+        padding-bottom: 8px;
+      }
+
+      h3 {
+        color: white;
+        font-size: 24px;
+      }
+
+      span {
+        font-size: 16px;
+      }
+    }
+  }
+
+  .landing-footer {
+    padding-top: 150px;
+    text-align: center;
+  }
+}
