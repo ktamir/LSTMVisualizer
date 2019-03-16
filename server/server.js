@@ -8,6 +8,7 @@ const mongo = require('./lib/mongo');
 const userModel = require('./models/user');
 const projectModel = require('./models/project');
 const forwardModel = require('./models/forward');
+const insightModel = require('./models/insight');
 const auth = require('./lib/auth');
 const cors = require('cors');
 
@@ -140,10 +141,59 @@ app.post('/projects/:projectId/forwards', checkUser, async (req, res, next) => {
     }
 });
 
+app.post('/projects/:projectId/insights', checkUser, async (req, res, next) => {
+    const userId = req.user._id;
+
+    const newInsight = insightModel({
+        user_id: userId,
+        project_id: req.params.projectId,
+        insights: req.body.insights,
+        pytorch_forward_creation_time: req.body.pytorch_forward_creation_time,
+        created_at: new Date()
+    });
+
+    try {
+        const createdInsight = await newInsight.save();
+        res.send({insight_id: createdInsight._id});
+    }
+    catch(e) {
+        return next(boom.internal(e));
+    }
+});
+
+app.put('/projects/:projectId', checkUser, async (req, res, next) => {
+    const userId = req.user._id;
+
+    let relevantProject =  await projectModel.findById(req.params.projectId);
+    relevantProject = _.assign(relevantProject, req.body);
+
+    console.log(relevantProject);
+
+    try {
+        await projectModel.updateOne({_id: req.params.projectId}, relevantProject);
+        return res.send(relevantProject);
+    }
+    catch (e) {
+        return next(boom.internal(e));
+    }
+});
+
+app.get('/projects/:projectId', checkUser, async (req, res, next) => {
+    const userId = req.user._id;
+
+    return res.send(await projectModel.find({user_id: userId, _id: req.params.projectId}));
+});
+
 app.get('/projects/:projectId/forwards', checkUser, async (req, res, next) => {
     const userId = req.user._id;
 
     return res.send(await forwardModel.find({user_id: userId, project_id: req.params.projectId}));
+});
+
+app.get('/projects/:projectId/insights', checkUser, async (req, res, next) => {
+    const userId = req.user._id;
+
+    return res.send(await insightModel.find({user_id: userId, project_id: req.params.projectId}));
 });
 
 app.put('/projects/:projectId/forwards/:forwardId', checkUser, async (req, res, next) => {

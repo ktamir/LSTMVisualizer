@@ -15,7 +15,7 @@ const App = () => (
             <Route path="/login/" component={Login}/>
             <Route path="/register/" component={Register}/>
             <Route path="/logout" component={Logout}/>
-            <Route path="/" component={Landing} />
+            <Route exact path="/" component={Landing} />
 
             <AppContainer />
         </Switch>

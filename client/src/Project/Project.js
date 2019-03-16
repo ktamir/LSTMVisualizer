@@ -2,9 +2,13 @@ import React, {Component} from "react";
 import {observer, inject} from "mobx-react";
 import axios from "axios";
 import {API_URL} from "../consts";
-import {Table, Divider, Card, Spin} from "antd";
+import {Table, Tabs, Card, Spin} from "antd";
 import './Project.scss';
 import ForwardVisualizationModal from "./ForwardVisualization/ForwardVisualizationModal";
+import General from "./General/General";
+import Insights from "./Insights/Insights";
+
+const TabPane = Tabs.TabPane;
 
 class Project extends Component {
 
@@ -60,7 +64,15 @@ class Project extends Component {
                 <Card><p>Your project doesn't have any data :(</p>
                 <p>Use your api key {this.props.authStore.apiKey} to send data from your PyTorch project</p>
                 </Card> :
-                <Table className="forwards-table" dataSource={this.state.data} columns={this.columns}/>
+                <Tabs defaultActiveKey="1">
+                    <TabPane tab="Iterations" key="1">
+                        <Table className="forwards-table" dataSource={this.state.data} columns={this.columns}/>
+                    </TabPane>
+                    <TabPane tab="General" key="2"><General projectId={this.props.match.params.projectId}/></TabPane>
+                    <TabPane tab="Insights" key="3">
+                        <Insights projectId={this.props.match.params.projectId} />
+                    </TabPane>
+                </Tabs>
         }
         return <Spin/>
 
