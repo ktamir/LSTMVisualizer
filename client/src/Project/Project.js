@@ -25,15 +25,26 @@ class Project extends Component {
         title: 'Label',
         key: 'label',
         render: (text, record) => record.data_by_iteration.text.join(' ')
-    }, {
-        title: 'Actions',
-        key: 'show',
-        render: (text, record) => (
-            <span>
+    },
+        {
+            title: "Last Context",
+            key: 'lastContext',
+            render: (text, record) => record.data_by_iteration.last_context[0][0].map(item => item.toPrecision(3)).join(' ')
+        },
+        {
+            title: "Last Hidden",
+            key: 'lastHidden',
+            render: (text, record) => record.data_by_iteration.last_hidden[0][0].map(item => item.toPrecision(3)).join(' ')
+        },
+        {
+            title: 'Actions',
+            key: 'show',
+            render: (text, record) => (
+                <span>
           <a onClick={() => this.showModal(record.data_by_iteration)}>Show Visualization</a>
         </span>
-        )
-    }];
+            )
+        }];
 
     componentDidMount = async () => {
         await this.fetchForwards();
@@ -62,7 +73,7 @@ class Project extends Component {
         if (this.state.data) {
             return this.state.data.length === 0 ?
                 <Card><p>Your project doesn't have any data :(</p>
-                <p>Use your api key {this.props.authStore.apiKey} to send data from your PyTorch project</p>
+                    <p>Use your api key {this.props.authStore.apiKey} to send data from your PyTorch project</p>
                 </Card> :
                 <Tabs defaultActiveKey="1">
                     <TabPane tab="Iterations" key="1">
@@ -70,7 +81,7 @@ class Project extends Component {
                     </TabPane>
                     <TabPane tab="General" key="2"><General projectId={this.props.match.params.projectId}/></TabPane>
                     <TabPane tab="Insights" key="3">
-                        <Insights projectId={this.props.match.params.projectId} />
+                        <Insights projectId={this.props.match.params.projectId}/>
                     </TabPane>
                 </Tabs>
         }

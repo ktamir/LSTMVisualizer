@@ -5,7 +5,7 @@ import {Link} from "react-router-dom";
 
 export const Landing = () => <div className="landing">
     <div className="landing-header">
-        <h3>Take Your LSTM To Life.</h3>
+        <h3>Bring Your LSTM To Life.</h3>
     </div>
 
     <div className="landing-content">
