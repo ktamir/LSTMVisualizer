@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {Tooltip} from "antd";
 
 export default class Colorize extends Component {
     render() {
@@ -38,6 +39,10 @@ export default class Colorize extends Component {
             color = firstArea;
         }
 
-        return <div style={{backgroundColor: `rgb(${color[0]},${color[1]},${color[2]})`}}>{this.props.children}</div>
+        return (
+            <Tooltip title={this.props.tooltipTitle}>
+                <span style={{backgroundColor: `rgb(${color[0]},${color[1]},${color[2]})`}}>{this.props.children}</span>
+            </Tooltip>
+        )
     }
 }
