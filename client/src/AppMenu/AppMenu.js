@@ -6,6 +6,8 @@ import axios from "axios";
 import AddProjectModal from "./AddProjectModal";
 import {Route, Switch, Redirect, Link} from 'react-router-dom';
 
+import logo from '../logo.png';
+
 const {Sider} = Layout;
 const {SubMenu} = Menu;
 
@@ -57,7 +59,7 @@ class AppMenu extends Component {
                 className="menu"
             >
                 <div className="menu-header" style={{color: 'white', textAlign: 'center', marginTop: 25}}>
-                    LSTM Visualizer
+                    <img src={logo} height={46} width={114}/>
                 </div>
                 <Menu
                     key="Menu"
