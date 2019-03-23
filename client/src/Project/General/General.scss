@@ -1,0 +1,29 @@
+.general-data {
+  .row {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-around;
+
+    .text-content {
+      width: 24%;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      text-transform: capitalize;
+
+      h3 {
+        font-size: 28px;
+      }
+
+      h1 {
+        font-size: 46px;
+      }
+    }
+
+    .insight-content {
+      text-align: center;
+      margin: auto;
+    }
+
+  }
+}

@@ -1,0 +1,25 @@
+.row {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-around;
+
+  .text-content {
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    h3 {
+      font-size: 32px;
+    }
+
+    h1 {
+      font-size: 52px;
+    }
+  }
+
+  .insight-content {
+    text-align: center;
+    margin: auto;
+  }
+}
