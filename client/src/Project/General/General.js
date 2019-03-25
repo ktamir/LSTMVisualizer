@@ -96,7 +96,7 @@ class General extends Component {
                         <Card className="text-content">
                             <div className="insight-content">
                                 <h3>Hidden Output Dropout Layer</h3>
-                                <h1>{this.state.general.hidden_output_dropout_layer}</h1>
+                                <h1>{this.state.general.hidden_output_dropout_layer.toString()}</h1>
                             </div>
                         </Card>
                     </div>
