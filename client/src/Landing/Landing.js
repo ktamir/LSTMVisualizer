@@ -12,7 +12,7 @@ export const Landing = () => <div className="landing">
         <Row>
             <Col span={8} className="landing-col">
                 <Icon type="dashboard" />
-                <h3>Gain visibility into your network</h3>
+                <h3>Gain Visibility Into Your Network</h3>
                 <span>Be able to see how predictions were made</span>
             </Col>
 
