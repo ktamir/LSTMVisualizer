@@ -16,9 +16,16 @@ class ForwardVisualizationModal extends Component {
             footer={null}
             className="visualization-modal"
         >
+            <div className="col">{data && data.hidden_layers[0][0].map((_, idx) => <div><b>{idx}</b></div>)}</div>
             {data && data.text.map((word, idx) => (<div className="col">
-                {data.prediction[idx].map(pred => (<div>
-                    <Colorize value={pred} min={-2} max={0} tooltipTitle={data.prediction_label[idx]}>{word}</Colorize>
+                <div className="col-header">
+                    <div>{word}</div>
+                    <div><b>{data.prediction_label[idx]}</b></div>
+                </div>
+                {data.hidden_layers[idx].map(hiddenVec => (<div>
+                    {hiddenVec.map(item =>
+                        <Colorize value={item} min={-1} max={1}>{item.toPrecision(3)}</Colorize>
+                    )}
                 </div>))}
             </div>))}
         </Modal>

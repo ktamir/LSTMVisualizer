@@ -41,7 +41,7 @@ export default class Colorize extends Component {
 
         return (
             <Tooltip title={this.props.tooltipTitle}>
-                <span style={{backgroundColor: `rgb(${color[0]},${color[1]},${color[2]})`}}>{this.props.children}</span>
+                <div style={{backgroundColor: `rgb(${color[0]},${color[1]},${color[2]})`}}>{this.props.children}</div>
             </Tooltip>
         )
     }

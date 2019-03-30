@@ -21,20 +21,16 @@ class Project extends Component {
         title: 'Iteration',
         dataIndex: 'data_by_iteration.iteration',
         key: 'iteration',
-    }, {
-        title: 'Label',
-        key: 'label',
-        render: (text, record) => record.data_by_iteration.text.join(' ')
     },
         {
-            title: "Last Context",
-            key: 'lastContext',
-            render: (text, record) => record.data_by_iteration.last_context[0][0].map(item => item.toPrecision(3)).join(' ')
+            title: 'Tag',
+            dataIndex: 'tag',
+            key: 'tag'
         },
         {
-            title: "Last Hidden",
-            key: 'lastHidden',
-            render: (text, record) => record.data_by_iteration.last_hidden[0][0].map(item => item.toPrecision(3)).join(' ')
+            title: 'Text',
+            key: 'text',
+            render: (text, record) => record.data_by_iteration.text.join(' ')
         },
         {
             title: 'Actions',
@@ -70,6 +66,7 @@ class Project extends Component {
     onCloseModal = () => this.setState({...this.state, showModal: false, modalData: null});
 
     renderProject = () => {
+        console.log(this.state.data);
         if (this.state.data) {
             return this.state.data.length === 0 ?
                 <Card><p>Your project doesn't have any data :(</p>
